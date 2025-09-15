@@ -1,5 +1,8 @@
 const API_BASE = process.env.REACT_APP_API_URL;
+console.log("API BASE", API_BASE);
 
+
+// Register user
 export async function registerUser(data) {
   const res = await fetch(`${API_BASE}/auth/register`, {
     method: "POST",
@@ -9,6 +12,7 @@ export async function registerUser(data) {
   return res.json();
 }
 
+// Login user
 export async function loginUser(data) {
   const res = await fetch(`${API_BASE}/auth/login`, {
     method: "POST",
@@ -18,40 +22,39 @@ export async function loginUser(data) {
   return res.json();
 }
 
-export async function addEmployee(data, token) {
-  const res = await fetch(`${API_BASE}/employee/add`, {
+// Add employee
+export async function addEmployee(data) {
+  const res = await fetch(`${API_BASE}/employees`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   return res.json();
 }
 
-export async function getEmployees(token) {
-  const res = await fetch(`${API_BASE}/employee/all`, {
-    headers: { Authorization: `Bearer ${token}` },
+// Get all employees
+export async function getEmployees() {
+  const res = await fetch(`${API_BASE}/employees`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
   });
   return res.json();
 }
 
-export async function deleteEmployee(id, token) {
-  const res = await fetch(`${API_BASE}/employee/${id}`, {
+// Delete employee
+export async function deleteEmployee(id) {
+  const res = await fetch(`${API_BASE}/employees/${id}`, {
     method: "DELETE",
-    headers: { Authorization: `Bearer ${token}` },
+    headers: { "Content-Type": "application/json" },
   });
   return res.json();
 }
 
-export async function updateEmployee(id, data, token) {
-  const res = await fetch(`${API_BASE}/employee/${id}`, {
+// Update employee
+export async function updateEmployee(id, data) {
+  const res = await fetch(`${API_BASE}/employees/${id}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   return res.json();

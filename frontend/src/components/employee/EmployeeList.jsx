@@ -45,17 +45,17 @@ const EmployeeList = ({ employees, onEdit, onDelete }) => {
               <tbody>
                 {currentEmployees.map((emp, index) => (
                   <tr
-                    key={emp._id || index}
+                    key={emp.id || index}
                     className="odd:bg-white even:bg-gray-50 hover:bg-blue-50 transition-colors h-14"
                   >
                     <td className="px-4 py-2 border-b border-gray-300 whitespace-nowrap">
                       {startIndex + index + 1}
                     </td>
                     <td className="px-4 py-2 border-b border-gray-300 whitespace-nowrap overflow-hidden text-ellipsis">
-                      {toTitleCase(emp.empName || "N/A")}
+                      {toTitleCase(emp.name || "N/A")}
                     </td>
                     <td className="px-4 py-2 border-b border-gray-300 whitespace-nowrap overflow-hidden text-ellipsis">
-                      {emp.empCode || "N/A"}
+                      {emp.code || "N/A"}
                     </td>
                     <td className="px-4 py-2 border-b border-gray-300 whitespace-nowrap">
                       {emp.doj ? new Date(emp.doj).toLocaleDateString() : "N/A"}

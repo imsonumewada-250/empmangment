@@ -19,23 +19,22 @@ class EmployeeController extends Controller
     /**
      * Store a newly created employee
      */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'name' => 'required',
-            'code' => 'required|unique:employees',
-            'doj' => 'required|date',
-            'department' => 'required',
-            'project' => 'required',
-        ]);
+public function store(Request $request)
+{
+    $employee = Employee::create([
+        'name' => $request->empName,   // mapping
+        'code' => $request->empCode,   // mapping
+        'doj' => $request->doj,
+        'department' => $request->department,
+        'project' => $request->project,
+    ]);
 
-        $employee = Employee::create($validated);
+    return response()->json([
+        'message' => 'Employee added successfully',
+        'employee' => $employee
+    ], 201);
+}
 
-        return response()->json([
-            'message' => 'Employee added successfully',
-            'employee' => $employee
-        ], 201);
-    }
 
     /**
      * Display the specified employee

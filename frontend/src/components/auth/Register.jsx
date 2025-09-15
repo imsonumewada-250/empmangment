@@ -11,11 +11,7 @@ const EyeIcon = ({ className }) => (
     stroke="currentColor"
     strokeWidth={2}
   >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-    />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -65,13 +61,34 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await registerUser(formData);
-    if (res.message === "User registered successfully") {
-      setError("");
-      setFormData({ name: "", mobile: "", password: "", confirmPassword: "" });
-      navigate("/login");
-    } else {
-      setError(res.message || "Registration failed");
+
+    // confirm password check (frontend only)
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    // backend ko sirf ye bhejna hai
+    const payload = {
+      name: formData.name,
+      mobile: formData.mobile,
+      password: formData.password,
+    };
+
+    try {
+      const res = await registerUser(payload);
+
+      if (res.message === "User registered successfully") {
+        setError("");
+        setFormData({ name: "", mobile: "", password: "", confirmPassword: "" });
+        navigate("/login");
+      } else {
+        setError(res.message || "Registration failed");
+        console.log("Backend response:", res);
+      }
+    } catch (err) {
+      console.error("Error:", err);
+      setError("Something went wrong!");
     }
   };
 
@@ -84,6 +101,7 @@ const Register = () => {
         <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
           Register
         </h2>
+
         <input
           name="name"
           type="text"
@@ -93,6 +111,7 @@ const Register = () => {
           required
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
+
         <input
           name="mobile"
           type="text"
@@ -103,7 +122,7 @@ const Register = () => {
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
 
-        {/* Password field with eye toggle */}
+        {/* Password */}
         <div className="relative mb-4">
           <input
             name="password"
@@ -120,15 +139,11 @@ const Register = () => {
             className="absolute right-3 top-2.5 text-gray-600 hover:text-gray-900"
             aria-label={showPassword ? "Hide password" : "Show password"}
           >
-            {showPassword ? (
-              <EyeOffIcon className="h-5 w-5" />
-            ) : (
-              <EyeIcon className="h-5 w-5" />
-            )}
+            {showPassword ? <EyeOffIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}
           </button>
         </div>
 
-        {/* Confirm Password field with eye toggle */}
+        {/* Confirm Password */}
         <div className="relative mb-6">
           <input
             name="confirmPassword"
@@ -145,11 +160,7 @@ const Register = () => {
             className="absolute right-3 top-2.5 text-gray-600 hover:text-gray-900"
             aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
           >
-            {showConfirmPassword ? (
-              <EyeOffIcon className="h-5 w-5" />
-            ) : (
-              <EyeIcon className="h-5 w-5" />
-            )}
+            {showConfirmPassword ? <EyeOffIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}
           </button>
         </div>
 
@@ -159,15 +170,14 @@ const Register = () => {
         >
           Register
         </button>
+
         {error && (
           <p className="text-red-600 mt-4 text-center font-medium">{error}</p>
         )}
+
         <p className="mt-6 text-center text-gray-600">
           Already have an account?{" "}
-          <Link
-            to="/login"
-            className="text-blue-600 hover:underline font-semibold"
-          >
+          <Link to="/login" className="text-blue-600 hover:underline font-semibold">
             Login here
           </Link>
         </p>

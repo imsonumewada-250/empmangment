@@ -31,7 +31,7 @@ const EmployeePage = () => {
     const { token, ...data } = formDataWithToken;
     try {
       const res = await addEmployee(data, token);
-      if (res?.employee?._id) {
+      if (res?.employee?.id) {
         setEmployees((prev) => [...prev, res.employee]);
         toast.success("Employee added successfully!", { autoClose: 1000 });
       } else {
@@ -45,10 +45,10 @@ const EmployeePage = () => {
 
   const handleUpdateEmployee = async (updatedData) => {
     try {
-      const res = await updateEmployee(updatedData._id, updatedData, token);
-      if (res?.employee?._id) {
+      const res = await updateEmployee(updatedData.id, updatedData, token);
+      if (res?.employee?.id) {
         setEmployees((prev) =>
-          prev.map((emp) => (emp._id === res.employee._id ? res.employee : emp))
+          prev.map((emp) => (emp.id === res.employee.id ? res.employee : emp))
         );
         setEditingEmployee(null);
         toast.success("Employee updated successfully!", { autoClose: 1000 });
@@ -67,11 +67,11 @@ const EmployeePage = () => {
   };
 
   const confirmDelete = async () => {
-    if (!employeeToDelete?._id) return;
+    if (!employeeToDelete?.id) return;
     try {
-      const res = await deleteEmployee(employeeToDelete._id, token);
+      const res = await deleteEmployee(employeeToDelete.id, token);
       if (res?.message) {
-        setEmployees((prev) => prev.filter((emp) => emp._id !== employeeToDelete._id));
+        setEmployees((prev) => prev.filter((emp) => emp.id !== employeeToDelete.id));
         toast.success(res.message, { autoClose: 1000 });
       } else {
         toast.error("Failed to delete employee", { autoClose: 1000 });
@@ -134,7 +134,7 @@ const EmployeePage = () => {
             <h3 className="text-lg font-semibold mb-4">Confirm Delete</h3>
             <p>
               Are you sure you want to delete employee{" "}
-              <strong>{toTitleCase(employeeToDelete?.empName)}</strong>?
+              <strong>{toTitleCase(employeeToDelete?.name)}</strong>?
             </p>
             <div className="mt-6 flex justify-end gap-4">
               <button
